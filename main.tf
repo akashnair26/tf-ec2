@@ -16,7 +16,7 @@ resource "aws_instance" "servers" {
   ami = data.aws_ami.ami.id
   instance_type = var.instance_type
   subnet_id = aws_subnet.privateSubnet1.id
-
+  security_groups = [aws_security_group.serverSG.id]
   user_data = <<-EOF
                 #!/bin/bash
                 sudo yum update -y
@@ -74,7 +74,7 @@ resource "aws_alb_listener" "albHTTPS" {
   port = 443
   protocol = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn = "arn:aws:acm:Region:444455556666:certificate/certificate_ID"
+  certificate_arn = "arn:aws:acm:us-east-1:444455556666:certificate/certificate_ID"
     default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.webTargetGroup.arn
